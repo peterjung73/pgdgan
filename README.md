@@ -1,4 +1,5 @@
 ## Solving Linear Inverse Problems using GANs
+
 forked from [Solving Linear Inverse Problems using GANs](https://github.com/shahviraj/pgdgan)
 
 Code for the paper: [Solving Linear Inverse Problems Using GAN Priors: An Algorithm with Provable Guarantees](https://arxiv.org/abs/1802.08406).
