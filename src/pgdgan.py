@@ -7,6 +7,14 @@ from argparse import ArgumentParser
 import numpy as np
 import utils
 
+# Adjust the path to your system
+os.chdir('/home/jbauer/PycharmProjects/pgdgan')
+
+#Alternativly, you can change working dir in Pycharm
+#Run --> Edit Configurations --> Set the Working Directory:
+#/home/jbauer/PycharmProjects/pgdgan
+
+
 def main(hparams):
     # Set up some stuff according to hparams
     hparams.n_input = np.prod(hparams.image_shape)
