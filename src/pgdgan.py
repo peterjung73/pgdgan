@@ -44,6 +44,10 @@ def main(hparams):
 
         y_batch_outer=np.matmul(x_batch, A_outer)
 
+        # Add noise
+        y_batch_outer = y_batch_outer + np.random.normal(0,hparams.sigma,y_batch_outer.shape)
+
+
 
         x_main_batch = 0.0 * x_batch
         z_opt_batch = np.random.randn(hparams.batch_size, 100)
@@ -66,14 +70,39 @@ def main(hparams):
             # Save the estimate
             x_hats_dict['dcgan'][key] = x_hat
 
+            rel_errors={}
+            rel_errors['dcgan']={}
+            ssims = {}
+            ssims['dcgan'] = {}
+
+
             # Compute and store measurement and l2 loss
             measurement_losses['dcgan'][key] = utils.get_measurement_loss(x_hat, A_outer, y)
             l2_losses['dcgan'][key] = utils.get_l2_loss(x_hat, x)
+            rel_errors['dcgan'][key] = utils.get_rel_error(x_hat, x)
+            ssims['dcgan'][key] = utils.get_ssim(x_hat, x)
+
+            avg_measurement_loss = np.mean(measurement_losses['dcgan'].values())
+            avg_l2_loss = np.mean(l2_losses['dcgan'].values())
+            avg_rel_errors = np.mean(rel_errors['dcgan'].values())
+            avg_ssim = np.mean(ssims['dcgan'].values())
+
+            print '*' * 50
+            print 'noise (sigma) = {}'.format(hparams.sigma)
+            print 'avg_measurement_loss = {0}'.format(avg_measurement_loss)
+            print 'avg_l2_loss = {0}'.format(avg_l2_loss)
+            print 'avg_rel_errors = {0}'.format(avg_rel_errors)
+            print 'avg_ssim ={0}'.format(avg_ssim)
+
+
+
         print 'Processed upto image {0} / {1}'.format(key+1, len(xs_dict))
+
+
 
         # Checkpointing
         if (hparams.save_images) and ((key+1) % hparams.checkpoint_iter == 0):
-            utils.checkpoint(x_hats_dict, measurement_losses, l2_losses, save_image, hparams)
+        #    utils.checkpoint(x_hats_dict, measurement_losses, l2_losses, save_image, hparams)
             #x_hats_dict = {'dcgan' : {}}
             print '\nProcessed and saved first ', key+1, 'images\n'
 
@@ -81,7 +110,7 @@ def main(hparams):
 
     # Final checkpoint
     if hparams.save_images:
-        utils.checkpoint(x_hats_dict, measurement_losses, l2_losses, save_image, hparams)
+    #    utils.checkpoint(x_hats_dict, measurement_losses, l2_losses, save_image, hparams)
         print '\nProcessed and saved all {0} image(s)\n'.format(len(xs_dict))
 
     if hparams.print_stats:
@@ -92,8 +121,8 @@ def main(hparams):
             print 'mean measurement loss = {0}'.format(mean_m_loss)
             print 'mean l2 loss = {0}'.format(mean_l2_loss)
 
-    if hparams.image_matrix > 0:
-        utils.image_matrix(xs_dict, x_hats_dict, view_image, hparams)
+    #if hparams.image_matrix > 0:
+     #   utils.image_matrix(xs_dict, x_hats_dict, view_image, hparams)
 
     # Warn the user that some things were not processsed
     if len(x_batch_dict) > 0:
@@ -103,6 +132,9 @@ def main(hparams):
 
 if __name__ == '__main__':
     PARSER = ArgumentParser()
+    # Noise
+    PARSER.add_argument('--sigma', type=float, default=0.0, help='stdev of gaussian noise')
+
 
     # Pretrained model
     PARSER.add_argument('--pretrained-model-dir', type=str, default='./models/celebA_64_64/', help='Directory containing pretrained model')
@@ -112,6 +144,8 @@ if __name__ == '__main__':
     PARSER.add_argument('--input-path-pattern', type=str, default='./data/celebAtest/*.jpg', help='Pattern to match to get images')
     PARSER.add_argument('--num-input-images', type=int, default=64, help='number of input images')
     PARSER.add_argument('--batch-size', type=int, default=64, help='How many examples are processed together')
+
+
 
     # Problem definition
     PARSER.add_argument('--measurement-type', type=str, default='gaussian', help='measurement type: as of now supports only gaussian')
@@ -138,7 +172,6 @@ if __name__ == '__main__':
     PARSER.add_argument('--outer-learning-rate', type=float, default=0.5, help='learning rate of outer loop GD')
     PARSER.add_argument('--max-outer-iter', type=int, default=10, help='maximum no. of iterations for outer loop GD')
 
-
     # Output
     PARSER.add_argument('--lazy', action='store_true', help='whether the evaluation is lazy')
     PARSER.add_argument('--save-images', action='store_true', help='whether to save estimated images')
@@ -155,7 +188,6 @@ if __name__ == '__main__':
                        )
 
     HPARAMS = PARSER.parse_args()
-
 
     HPARAMS.image_shape = (64, 64, 3)
     from celebA_input import model_input
