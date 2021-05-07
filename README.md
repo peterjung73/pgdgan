@@ -1,3 +1,6 @@
+## Latex Link
+https://www.overleaf.com/7536561855dnqxncpjkszw
+
 ## Solving Linear Inverse Problems using GANs
 
 forked from [Solving Linear Inverse Problems using GANs](https://github.com/shahviraj/pgdgan)
