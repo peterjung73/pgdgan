@@ -13,15 +13,13 @@ import json
 import random
 import pprint
 import scipy.misc
+
 import numpy as np
 from time import gmtime, strftime
 
 pp = pprint.PrettyPrinter()
 
 get_stddev = lambda x, k_h, k_w: 1/math.sqrt(k_w*k_h*x.get_shape()[-1])
-
-def get_image(image_path, image_size, is_crop=True, resize_w=64, is_grayscale = False):
-    return transform(imread(image_path, is_grayscale), image_size, is_crop, resize_w)
 
 def save_images(images, size, image_path):
     return imsave(inverse_transform(images), size, image_path)
@@ -31,6 +29,9 @@ def imread(path, is_grayscale = False):
         return scipy.misc.imread(path, flatten = True).astype(np.float)
     else:
         return scipy.misc.imread(path).astype(np.float)
+
+def get_image(image_path, image_size, is_crop=True, resize_w=64, is_grayscale = False):
+    return transform(imread(image_path, is_grayscale), image_size, is_crop, resize_w)
 
 def merge_images(images, size):
     return inverse_transform(images)

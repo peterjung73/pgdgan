@@ -140,12 +140,12 @@ def dcgan_estimator(hparams):
                                         d_loss1,
                                         d_loss2], feed_dict=feed_dict)
                 logging_format = 'rr {} iter {} lr {} total_loss {} m_loss1 {} m_loss2 {} zp_loss {} d_loss1 {} d_loss2 {}'
-                print logging_format.format(i, j, lr_val, total_loss_val,
+                print(logging_format.format(i, j, lr_val, total_loss_val,
                                             m_loss1_val,
                                             m_loss2_val,
                                             zp_loss_val,
                                             d_loss1_val,
-                                            d_loss2_val)
+                                            d_loss2_val))
 
             x_hat_batch_val,z_batch_val,total_loss_batch_val = sess.run([x_hat_batch,z_batch, total_loss_batch], feed_dict=feed_dict)
             best_keeper.report(x_hat_batch_val,z_batch_val, total_loss_batch_val)

@@ -248,11 +248,11 @@ def set_up_dir(directory, clean=False):
 
 
 def print_hparams(hparams):
-    print ''
+    print('')
     for temp in dir(hparams):
         if temp[:1] != '_':
-            print '{0} = {1}'.format(temp, getattr(hparams, temp))
-    print ''
+            print('{0} = {1}'.format(temp, getattr(hparams, temp)))
+    print('')
 
 
 def get_learning_rate(global_step, hparams):
@@ -297,7 +297,7 @@ def get_checkpoint_path(ckpt_dir):
         ckpt_path = os.path.join(ckpt_dir,
                                  ckpt.model_checkpoint_path)
     else:
-        print 'No checkpoint file found'
+        print('No checkpoint file found')
         ckpt_path = ''
     return ckpt_path
 

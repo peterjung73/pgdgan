@@ -10,8 +10,8 @@ They come with the following license: https://github.com/carpedm20/DCGAN-tensorf
 """
 
 import tensorflow as tf
-import ops
-
+#import ops
+import celebA_dcgan.ops as ops
 
 class Hparams(object):
     def __init__(self):

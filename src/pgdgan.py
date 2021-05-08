@@ -30,7 +30,7 @@ def main(hparams):
 
     x_hats_dict = {'dcgan' : {}}
     x_batch_dict = {}
-    for key, x in xs_dict.iteritems():
+    for key, x in xs_dict.items():
         if hparams.lazy:
             # If lazy, first check if the image has already been
             # saved before by *all* estimators. If yes, then skip this image.
@@ -44,7 +44,7 @@ def main(hparams):
             continue
 
         # Reshape input
-        x_batch_list = [x.reshape(1, hparams.n_input) for _, x in x_batch_dict.iteritems()]
+        x_batch_list = [x.reshape(1, hparams.n_input) for _, x in x_batch_dict.items()]
         x_batch = np.concatenate(x_batch_list)
 
         # Construct measurements
@@ -77,36 +77,36 @@ def main(hparams):
             # Compute and store measurement and l2 loss
             measurement_losses['dcgan'][key] = utils.get_measurement_loss(x_hat, A_outer, y)
             l2_losses['dcgan'][key] = utils.get_l2_loss(x_hat, x)
-        print 'Processed upto image {0} / {1}'.format(key+1, len(xs_dict))
+        print('Processed upto image {0} / {1}'.format(key+1, len(xs_dict)))
 
         # Checkpointing
         if (hparams.save_images) and ((key+1) % hparams.checkpoint_iter == 0):
             utils.checkpoint(x_hats_dict, measurement_losses, l2_losses, save_image, hparams)
             #x_hats_dict = {'dcgan' : {}}
-            print '\nProcessed and saved first ', key+1, 'images\n'
+            print ('\nProcessed and saved first ', key+1, 'images\n')
 
         x_batch_dict = {}
 
     # Final checkpoint
     if hparams.save_images:
         utils.checkpoint(x_hats_dict, measurement_losses, l2_losses, save_image, hparams)
-        print '\nProcessed and saved all {0} image(s)\n'.format(len(xs_dict))
+        print('\nProcessed and saved all {0} image(s)\n'.format(len(xs_dict)))
 
     if hparams.print_stats:
         for model_type in hparams.model_types:
-            print model_type
+            print(model_type)
             mean_m_loss = np.mean(measurement_losses[model_type].values())
             mean_l2_loss = np.mean(l2_losses[model_type].values())
-            print 'mean measurement loss = {0}'.format(mean_m_loss)
-            print 'mean l2 loss = {0}'.format(mean_l2_loss)
+            print('mean measurement loss = {0}'.format(mean_m_loss))
+            print('mean l2 loss = {0}'.format(mean_l2_loss))
 
     if hparams.image_matrix > 0:
         utils.image_matrix(xs_dict, x_hats_dict, view_image, hparams)
 
     # Warn the user that some things were not processsed
     if len(x_batch_dict) > 0:
-        print '\nDid NOT process last {} images because they did not fill up the last batch.'.format(len(x_batch_dict))
-        print 'Consider rerunning lazily with a smaller batch size.'
+        print('\nDid NOT process last {} images because they did not fill up the last batch.'.format(len(x_batch_dict)))
+        print('Consider rerunning lazily with a smaller batch size.')
 
 
 if __name__ == '__main__':
@@ -118,6 +118,8 @@ if __name__ == '__main__':
     # Input
     PARSER.add_argument('--input-type', type=str, default='full-input', help='Where to take input from')
     PARSER.add_argument('--input-path-pattern', type=str, default='./data/celebAtest/*.jpg', help='Pattern to match to get images')
+    #PARSER.add_argument('--num-input-images', type=int, default=64, help='number of input images')
+    #PARSER.add_argument('--batch-size', type=int, default=64, help='How many examples are processed together')
     PARSER.add_argument('--num-input-images', type=int, default=64, help='number of input images')
     PARSER.add_argument('--batch-size', type=int, default=64, help='How many examples are processed together')
 
@@ -140,11 +142,13 @@ if __name__ == '__main__':
     PARSER.add_argument('--optimizer-type', type=str, default='adam', help='Optimizer type')
     PARSER.add_argument('--learning-rate', type=float, default=0.1, help='learning rate')
     PARSER.add_argument('--momentum', type=float, default=0.9, help='momentum value')
-    PARSER.add_argument('--max-update-iter', type=int, default=100, help='maximum updates to z')
+    #PARSER.add_argument('--max-update-iter', type=int, default=100, help='maximum updates to z')
+    PARSER.add_argument('--max-update-iter', type=int, default=2, help='maximum updates to z')
     PARSER.add_argument('--num-random-restarts', type=int, default=1, help='number of random restarts')
     PARSER.add_argument('--decay-lr', action='store_true', help='whether to decay learning rate')
     PARSER.add_argument('--outer-learning-rate', type=float, default=0.5, help='learning rate of outer loop GD')
-    PARSER.add_argument('--max-outer-iter', type=int, default=10, help='maximum no. of iterations for outer loop GD')
+    #PARSER.add_argument('--max-outer-iter', type=int, default=10, help='maximum no. of iterations for outer loop GD'
+    PARSER.add_argument('--max-outer-iter', type=int, default=3, help='maximum no. of iterations for outer loop GD')
 
 
     # Output
