@@ -1,10 +1,10 @@
 # Files of this project is modified versions of 'https://github.com/AshishBora/csgm', which
 #comes with the MIT licence: https://github.com/AshishBora/csgm/blob/master/LICENSE
 
-import png
 import dcgan_utils
 import numpy as np
 import utils
+import scipy.misc
 
 
 def display_transform(image):
@@ -26,6 +26,5 @@ def view_image(image, hparams, mask=None):
 def save_image(image, path):
     """Save an image as a png file"""
     image = dcgan_utils.inverse_transform(image)
-    png_writer = png.Writer(64, 64)
     with open(path, 'wb') as outfile:
-        png_writer.write(outfile, 255*image.reshape([64,-1]))
+        scipy.misc.imsave(outfile, 255*image)
