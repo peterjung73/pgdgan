@@ -7,7 +7,7 @@ import shutil
 import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
-from skimage.measure import compare_ssim as ssim
+from skimage.metrics import structural_similarity as ssim
 from matplotlib.backends.backend_pdf import PdfPages
 
 import celebA_estimators

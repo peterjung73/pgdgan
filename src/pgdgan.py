@@ -74,10 +74,10 @@ def main(hparams):
             rel_errors['dcgan'][key] = utils.get_rel_error(x_hat, x)
             ssims['dcgan'][key] = utils.get_ssim(x_hat, x)
 
-        avg_measurement_loss = np.mean(measurement_losses['dcgan'].values())
-        avg_l2_loss = np.mean(l2_losses['dcgan'].values())
-        avg_rel_errors = np.mean(rel_errors['dcgan'].values())
-        avg_ssim = np.mean(ssims['dcgan'].values())
+        avg_measurement_loss = np.mean(list(measurement_losses['dcgan'].values()))
+        avg_l2_loss = np.mean(list(l2_losses['dcgan'].values()))
+        avg_rel_errors = np.mean(list(rel_errors['dcgan'].values()))
+        avg_ssim = np.mean(list(ssims['dcgan'].values()))
 
         print('*' * 50)
         print('noise (sigma) = {}'.format(hparams.sigma))
