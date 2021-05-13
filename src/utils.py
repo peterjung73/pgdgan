@@ -35,11 +35,18 @@ class BestKeeper(object):
     def get_best(self):
         return self.x_hat_batch_val_best,self.z_batch_val_best
 
+def save_results(f,yhat,xhat,y,x):
+    np.savez(f, yhat=yhat, xhat=xhat, y=y, x=x)
+    
+def unpack_results(dir2file):
+    data = np.load(dir2file)
+    return data['yhat'], data['xhat'], data['y'], data['x']
 
 def get_l2_loss(image1, image2):
     """Get L2 loss between the two images"""
     assert image1.shape == image2.shape
-    return np.mean((image1 - image2)**2)
+    #return np.mean((image1 - image2)**2)
+    return (np.linalg.norm(image1 - image2))**2
 
 def get_rel_error(image1, image2):
     return (np.linalg.norm(image1-image2)/(np.linalg.norm(image1)))
@@ -54,7 +61,8 @@ def get_measurement_loss(x_hat, A, y):
     else:
         y_hat = np.matmul(x_hat, A)
     assert y_hat.shape == y.shape
-    return np.mean((y - y_hat) ** 2)
+    #return np.mean((y - y_hat) ** 2)
+    return np.linalg.norm(y - y_hat) ** 2
 
 
 def save_to_pickle(data, pkl_filepath):
