@@ -1,0 +1,7 @@
+1. Create python venv with python3 and tensorflow==1.4.0
+
+2. Copy Load_GAN_Model.py and Train_GAN.py in separate jupyter notebooks
+
+3. In Train_GAN.py an simple GAN is trained
+
+4. In Load_GAN_Model.py a pretrained gan model is used to generate sample images

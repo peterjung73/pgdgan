@@ -1,3 +1,10 @@
+GAN_MNIST/GAN_Training/*
+!GAN_MNIST/GAN_Training/Train_GAN.py
+
+GAN_MNIST/GAN_Loading/*
+!GAN_MNIST/GAN_Loading/Load_GAN_Model.py
+!GAN_MNIST/GAN_Loading/pretrained115
+
 data/
 models/
 estimated/
